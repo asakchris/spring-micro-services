@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+spring:
+  application:
+    name: admin-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      startup: ${random.int}
+
+zuul:
+  routes:
+    welcome-service:
+      path: /welcome/**
+      serviveId: welcome-service
+      stripPrefix: true
+    random-service:
+      path: /random/**
+      serviveId: random-service
+      stripPrefix: true
+
+ribbon:
+  readTimeout: 50000
+  socketTimeout: 50000
